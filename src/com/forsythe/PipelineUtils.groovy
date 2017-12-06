@@ -4,8 +4,8 @@ package com.forsythe
 class PipelineUtils implements Serializable {
 
     @NonCPS
-    def extractNamespace() {
-        return "${env.JOB_NAME}".tokenize('/')[0]
+    def extractNamespace(jobName) {
+        return jobName.tokenize('/')[0]
     }
 
     @NonCPS
