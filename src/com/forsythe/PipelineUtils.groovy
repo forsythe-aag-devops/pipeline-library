@@ -52,12 +52,12 @@ class PipelineUtils implements Serializable {
 
     @NonCPS
     def createNamespace(String namespace) {
-        steps.sh "kubectl create namespace ${projectNamespace} || true"
+        steps.sh "kubectl create namespace ${namespace} || true"
     }
 
     @NonCPS
     def deleteNamespace(String namespace) {
-        steps.sh "kubectl delete namespace ${projectNamespace} --ignore-not-found=true"
+        steps.sh "kubectl delete namespace ${namespace} --ignore-not-found=true"
     }
 
     @NonCPS
