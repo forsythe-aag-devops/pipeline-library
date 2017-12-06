@@ -53,3 +53,5 @@ def deleteNamespace(String namespace) {
 def extractServiceEndpoint(String namespace, String serviceName) {
     nexusEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${namespace}' get svc ${serviceName} --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
 }
+
+return this
