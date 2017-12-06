@@ -3,15 +3,18 @@ package com.forsythe
 
 class PipelineUtils implements Serializable {
 
+    @NonCPS
     def extractNamespace() {
         return "${env.JOB_NAME}".tokenize('/')[0]
     }
 
+    @NonCPS
     def waitForValidNamespaceState(String namespace) {
         waitForAllPodsRunning(namespace)
         waitForAllServicesRunning(namespace)
     }
 
+    @NonCPS
     def waitForAllPodsRunning(String namespace) {
         timeout(time: 3, unit: 'MINUTES') {
             while (true) {
@@ -27,6 +30,7 @@ class PipelineUtils implements Serializable {
         }
     }
 
+    @NonCPS
     def waitForAllServicesRunning(String namespace) {
         timeout(time: 3, unit: 'MINUTES') {
             while (true) {
@@ -42,6 +46,7 @@ class PipelineUtils implements Serializable {
         }
     }
 
+    @NonCPS
     def createNamespace(String namespace) {
         try {
             sh "kubectl create namespace ${projectNamespace} || true"
@@ -49,10 +54,12 @@ class PipelineUtils implements Serializable {
         }
     }
 
+    @NonCPS
     def deleteNamespace(String namespace) {
         sh "kubectl delete namespace ${projectNamespace} --ignore-not-found=true"
     }
 
+    @NonCPS
     def extractServiceEndpoint(String namespace, String serviceName) {
         nexusEndpoint = sh(returnStdout: true, script: "kubectl --namespace='${namespace}' get svc ${serviceName} --no-headers --template '{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}'").trim()
     }
