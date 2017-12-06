@@ -66,21 +66,13 @@ class PipelineUtils implements Serializable {
     }
 
     @NonCPS
-    def analyzeCode(String jobName) {
+    def analyzeCode(String jobName, String srcDirectory) {
         try {
-            def srcDirectory = steps.pwd()
-            def tmpDir = steps.pwd(tmp: true)
-            steps.dir(tmpDir) {
-                def scannerVersion = "2.8"
-                def localScanner = "scanner-cli.jar"
-                def scannerURL = "http://central.maven.org/maven2/org/sonarsource/scanner/cli/sonar-scanner-cli/${scannerVersion}/sonar-scanner-cli-${scannerVersion}.jar"
-                steps.echo "downloading scanner-cli"
-                steps.sh "curl -o ${localScanner} ${scannerURL} &> /dev/null"
-                steps.echo "executing sonar scanner "
-                def projectKey = jobName.replaceAll('/', "_")
-                steps.sh "java -jar ${localScanner} -Dsonar.host.url=http://sonarqube:9000  -Dsonar.projectKey=${projectKey} -Dsonar.projectBaseDir=${srcDirectory} -Dsonar.java.binaries=${srcDirectory}/target/classes -Dsonar.sources=${srcDirectory}"
-            }
-
+            steps.echo "downloading scanner-cli"
+            steps.sh "curl -o scanner-cli.jar http://central.maven.org/maven2/org/sonarsource/scanner/cli/sonar-scanner-cli/2.8/sonar-scanner-cli-2.8.jar"
+            steps.echo "executing sonar scanner "
+            def projectKey = jobName.replaceAll('/', "_")
+            steps.sh "java -jar scanner-cli.jar -Dsonar.host.url=http://sonarqube:9000  -Dsonar.projectKey=${projectKey} -Dsonar.projectBaseDir=${srcDirectory} -Dsonar.java.binaries=${srcDirectory}/target/classes -Dsonar.sources=${srcDirectory}"
         } catch (err) {
             print "Failed to execute scanner:"
             print "Exception: ${err}"
