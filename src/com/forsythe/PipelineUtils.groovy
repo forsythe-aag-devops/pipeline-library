@@ -23,7 +23,7 @@ class PipelineUtils implements Serializable {
         steps.timeout(time: 3, unit: 'MINUTES') {
             while (true) {
                 def proc = "sh kubectl --namespace='${namespace}' get pods --no-headers".execute()
-                podsStatus = proc.in.text.trim()
+                def podsStatus = proc.in.text.trim()
                 def notRunning = podsStatus.readLines().findAll { line -> !line.contains('Running') }
                 if (notRunning.isEmpty()) {
                     echo 'All pods are running'
@@ -40,7 +40,7 @@ class PipelineUtils implements Serializable {
         steps.timeout(time: 3, unit: 'MINUTES') {
             while (true) {
                 def proc = "sh kubectl --namespace='${namespace}' get services --no-headers".execute()
-                servicesStatus = proc.in.text.trim()
+                def servicesStatus = proc.in.text.trim()
                 def notRunning = servicesStatus.readLines().findAll { line -> line.contains('pending') }
                 if (notRunning.isEmpty()) {
                     echo 'All pods are running'
