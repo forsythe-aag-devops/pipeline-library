@@ -25,7 +25,7 @@ class PipelineUtils implements Serializable {
                 podsStatus = steps.sh(returnStdout: true, script: "kubectl --namespace='${namespace}' get pods --no-headers").trim()
                 def notRunning = podsStatus.readLines().findAll { line -> !line.contains('Running') }
                 if (notRunning.isEmpty()) {
-                    print 'All pods are running'
+                    echo 'All pods are running'
                     break
                 }
                 steps.sh "kubectl --namespace='${namespace}' get pods"
@@ -41,7 +41,7 @@ class PipelineUtils implements Serializable {
                 servicesStatus = steps.sh(returnStdout: true, script: "kubectl --namespace='${namespace}' get services --no-headers").trim()
                 def notRunning = servicesStatus.readLines().findAll { line -> line.contains('pending') }
                 if (notRunning.isEmpty()) {
-                    print 'All pods are running'
+                    echo 'All pods are running'
                     break
                 }
                 steps.sh "kubectl --namespace='${namespace}' get services"
