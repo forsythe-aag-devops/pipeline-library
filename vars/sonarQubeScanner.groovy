@@ -16,6 +16,7 @@ def call(body) {
 
             //work in tmpDir - as sonar scanner will download files from the server
             dir(tmpDir) {
+                def jobName = "${env.JOB_NAME}".tokenize('/')[0]
 
                 def localScanner = "scanner-cli.jar"
 
@@ -27,7 +28,7 @@ def call(body) {
 
                 echo("executing sonar scanner ")
 
-                sh "java -jar ${localScanner}  -Dsonar.host.url=http://${serviceName}:${port}  -Dsonar.projectKey=${env.JOB_NAME} -Dsonar.sources=${srcDirectory}"
+                sh "java -jar ${localScanner}  -Dsonar.host.url=http://${serviceName}:${port}  -Dsonar.projectKey=${jobName} -Dsonar.sources=${srcDirectory}"
             }
 
         } catch (err) {
